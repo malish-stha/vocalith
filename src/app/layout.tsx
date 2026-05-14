@@ -4,6 +4,7 @@ import "./globals.css";
 import { cn } from "@/lib/utils";
 import { Toaster } from "@/components/ui/sonner";
 import { ClerkProvider } from "@clerk/nextjs";
+import { TooltipProvider } from "@/components/ui/tooltip";
 
 const ebGaramondHeading = EB_Garamond({
   subsets: ["latin"],
@@ -47,8 +48,10 @@ export default function RootLayout({
         )}
       >
         <body>
-          {children}
-          <Toaster />
+          <TooltipProvider>
+            {children}
+            <Toaster />
+          </TooltipProvider>
         </body>
       </html>
     </ClerkProvider>
