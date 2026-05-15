@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 import { Toaster } from "@/components/ui/sonner";
 import { ClerkProvider } from "@clerk/nextjs";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { TRPCReactProvider } from "@/trpc/client";
 
 const ebGaramondHeading = EB_Garamond({
   subsets: ["latin"],
@@ -38,25 +39,27 @@ export default function RootLayout({
 }>) {
   return (
     <ClerkProvider>
-      <html
-        lang="en"
-        className={cn(
-          "h-full",
-          "antialiased",
-          geistSans.variable,
-          geistMono.variable,
-          "font-sans",
-          notoSans.variable,
-          ebGaramondHeading.variable,
-        )}
-      >
-        <body>
-          <TooltipProvider>
-            {children}
-            <Toaster />
-          </TooltipProvider>
-        </body>
-      </html>
+      <TRPCReactProvider>
+        <html
+          lang="en"
+          className={cn(
+            "h-full",
+            "antialiased",
+            geistSans.variable,
+            geistMono.variable,
+            "font-sans",
+            notoSans.variable,
+            ebGaramondHeading.variable,
+          )}
+        >
+          <body>
+            <TooltipProvider>
+              {children}
+              <Toaster />
+            </TooltipProvider>
+          </body>
+        </html>
+      </TRPCReactProvider>
     </ClerkProvider>
   );
 }
