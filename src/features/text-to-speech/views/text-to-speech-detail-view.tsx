@@ -12,8 +12,6 @@ import {
 import { TTSVoicesProvider } from "../contexts/tts-voices-context";
 import { VoicePreviewPanel } from "../components/voice-preview-panel";
 import { VoicePreviewMobile } from "../components/voice-preview-mobile";
-// import { VoicePreviewPanel } from "../components/voice-preview-panel";
-// import { VoicePreviewMobile } from "../components/voice-preview-mobile";
 
 export function TextToSpeechDetailView({
   generationId,

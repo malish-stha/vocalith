@@ -6,6 +6,7 @@ import { Toaster } from "@/components/ui/sonner";
 import { ClerkProvider } from "@clerk/nextjs";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { TRPCReactProvider } from "@/trpc/client";
+import { NuqsAdapter } from "nuqs/adapters/next/app";
 
 const ebGaramondHeading = EB_Garamond({
   subsets: ["latin"],
@@ -54,7 +55,8 @@ export default function RootLayout({
         >
           <body>
             <TooltipProvider>
-              {children}
+              <NuqsAdapter> {children}</NuqsAdapter>
+
               <Toaster />
             </TooltipProvider>
           </body>
