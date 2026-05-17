@@ -1,10 +1,11 @@
+import * as Sentry from "@sentry/nextjs";
 import { z } from "zod";
-import { createTRPCRouter, orgProcedure } from "../init";
-import { prisma } from "@/lib/db";
 import { TRPCError } from "@trpc/server";
-import { TEXT_MAX_LENGTH } from "@/features/text-to-speech/data/constants";
 import { chatterbox } from "@/lib/chatterbox-client";
+import { prisma } from "@/lib/db";
 import { uploadAudio } from "@/lib/r2";
+import { TEXT_MAX_LENGTH } from "@/features/text-to-speech/data/constants";
+import { createTRPCRouter, orgProcedure } from "../init";
 
 export const generationsRouter = createTRPCRouter({
   getById: orgProcedure
@@ -19,11 +20,9 @@ export const generationsRouter = createTRPCRouter({
       });
 
       if (!generation) {
-        throw new TRPCError({
-          code: "NOT_FOUND",
-          message: "Generation not found",
-        });
+        throw new TRPCError({ code: "NOT_FOUND" });
       }
+
       return {
         ...generation,
         audioUrl: `/api/audio/${generation.id}`,
@@ -39,6 +38,7 @@ export const generationsRouter = createTRPCRouter({
         r2ObjectKey: true,
       },
     });
+
     return generations;
   }),
 
@@ -71,6 +71,7 @@ export const generationsRouter = createTRPCRouter({
           r2ObjectKey: true,
         },
       });
+
       if (!voice) {
         throw new TRPCError({
           code: "NOT_FOUND",
@@ -96,6 +97,12 @@ export const generationsRouter = createTRPCRouter({
           norm_loudness: true,
         },
         parseAs: "arrayBuffer",
+      });
+
+      Sentry.logger.info("Generation started", {
+        orgId: ctx.orgId,
+        voiceId: input.voiceId,
+        textLength: input.text.length,
       });
 
       if (error) {
@@ -146,6 +153,11 @@ export const generationsRouter = createTRPCRouter({
             r2ObjectKey,
           },
         });
+
+        Sentry.logger.info("Audio generated", {
+          orgId: ctx.orgId,
+          generationId: generation.id,
+        });
       } catch {
         if (generationId) {
           await prisma.generation
@@ -156,6 +168,19 @@ export const generationsRouter = createTRPCRouter({
             })
             .catch(() => {});
         }
+
+        Sentry.logger.error("Generation failed", {
+          orgId: ctx.orgId,
+          voiceId: input.voiceId,
+        });
+
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Failed to store generated audio",
+        });
+      }
+
+      if (!generationId || !r2ObjectKey) {
         throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
           message: "Failed to store generated audio",
