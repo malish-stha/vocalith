@@ -1,14 +1,22 @@
 "use client";
 
-import { Textarea } from "@/components/ui/textarea";
-import { useStore } from "@tanstack/react-form";
-import { useState } from "react";
-import { COST_PER_UNIT, TEXT_MAX_LENGTH } from "../data/constants";
-import { useTypedAppFormContext } from "@/hooks/use-app-form";
-import { Badge } from "@/components/ui/badge";
 import { Coins } from "lucide-react";
+import { useStore } from "@tanstack/react-form";
+
+import { Badge } from "@/components/ui/badge";
+import { Textarea } from "@/components/ui/textarea";
+import { useTypedAppFormContext } from "@/hooks/use-app-form";
+
+import {
+  COST_PER_UNIT,
+  TEXT_MAX_LENGTH,
+} from "@/features/text-to-speech/data/constants";
 import { ttsFormOptions } from "./text-to-speech-form";
 import { GenerateButton } from "./generate-button";
+import { SettingsDrawer } from "./settings-drawer";
+import { HistoryDrawer } from "./history-drawer";
+import { PromptSuggestions } from "./prompt-suggestions";
+import { VoiceSelectorButton } from "./voice-selector-button";
 
 export function TextInputPanel() {
   const form = useTypedAppFormContext(ttsFormOptions);
@@ -19,6 +27,7 @@ export function TextInputPanel() {
 
   return (
     <div className="flex h-full min-h-0 flex-col flex-1">
+      {/* Text input area */}
       <div className="relative min-h-0 flex-1">
         <form.Field name="text">
           {(field) => (
@@ -32,17 +41,27 @@ export function TextInputPanel() {
             />
           )}
         </form.Field>
+        {/* Bottom fade overlay */}
         <div className="pointer-events-none absolute inset-x-0 bottom-0 h-8 bg-linear-to-t from-background to-transparent" />
       </div>
+      {/* Action bar */}
       <div className="shrink-0 p-4 lg:p-6">
+        {/* Mobile layout */}
         <div className="flex flex-col gap-3 lg:hidden">
+          <div className="flex items-center gap-2">
+            <SettingsDrawer>
+              <VoiceSelectorButton />
+            </SettingsDrawer>
+            <HistoryDrawer />
+          </div>
           <GenerateButton
             className="w-full"
             disabled={isSubmitting}
             isSubmitting={isSubmitting}
-            onSubmit={() => form.handleSubmit}
+            onSubmit={() => form.handleSubmit()}
           />
         </div>
+        {/* Desktop layout */}
         {text.length > 0 ? (
           <div className="hidden items-center justify-between lg:flex">
             <Badge variant="outline" className="gap-1.5 border-dashed">
@@ -50,8 +69,8 @@ export function TextInputPanel() {
               <span className="text-xs">
                 <span className="tabular-nums">
                   ${(text.length * COST_PER_UNIT).toFixed(4)}
-                </span>{" "}
-                estimated
+                </span>
+                &nbsp; estimated
               </span>
             </Badge>
             <div className="flex items-center gap-3">
@@ -65,15 +84,15 @@ export function TextInputPanel() {
                 size="sm"
                 disabled={isSubmitting || !isValid}
                 isSubmitting={isSubmitting}
-                onSubmit={() => form.handleSubmit}
+                onSubmit={() => form.handleSubmit()}
               />
             </div>
           </div>
         ) : (
           <div className="hidden lg:block">
-            <p className="text-sm text-muted-foreground">
-              Get started by typing or pasting text above
-            </p>
+            <PromptSuggestions
+              onSelect={(prompt) => form.setFieldValue("text", prompt)}
+            />
           </div>
         )}
       </div>

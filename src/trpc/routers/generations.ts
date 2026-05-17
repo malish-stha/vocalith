@@ -11,9 +11,9 @@ export const generationsRouter = createTRPCRouter({
     .input(z.object({ id: z.string() }))
     .query(async ({ input, ctx }) => {
       const generation = await prisma.generation.findUnique({
-        where: { id: input.id, orgIdId: ctx.orgId },
+        where: { id: input.id, orgId: ctx.orgId },
         omit: {
-          orgIdId: true,
+          orgId: true,
           r2ObjectKey: true,
         },
       });
@@ -35,7 +35,7 @@ export const generationsRouter = createTRPCRouter({
       where: { orgId: ctx.orgId },
       orderBy: { createdAt: "desc" },
       omit: {
-        orgIdId: true,
+        orgId: true,
         r2ObjectKey: true,
       },
     });
