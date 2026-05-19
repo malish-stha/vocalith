@@ -28,6 +28,7 @@ A modern, full-featured text-to-speech (TTS) application built with Next.js, Rea
 ## 🛠️ Tech Stack
 
 ### Frontend
+
 - **Framework**: [Next.js 16](https://nextjs.org/) - React meta-framework
 - **UI Library**: [React 19](https://react.dev/)
 - **Language**: [TypeScript 5](https://www.typescriptlang.org/)
@@ -39,6 +40,7 @@ A modern, full-featured text-to-speech (TTS) application built with Next.js, Rea
 - **Icons**: [Lucide React](https://lucide.dev/), [Hugeicons](https://www.hugeicons.com/)
 
 ### Backend
+
 - **API**: [tRPC 11](https://trpc.io/) with React Query integration
 - **Database**: [PostgreSQL](https://www.postgresql.org/) with [Prisma ORM](https://www.prisma.io/)
 - **Authentication**: [Clerk](https://clerk.com/)
@@ -47,12 +49,13 @@ A modern, full-featured text-to-speech (TTS) application built with Next.js, Rea
 - **TTS Engine**: [Chatterbox API](https://chatterbox.com/)
 
 ### DevOps & Monitoring
+
 - **Error Tracking**: [Sentry](https://sentry.io/)
 - **Environment Management**: [@t3-oss/env-nextjs](https://env.t3.gg/)
 
 ## 📋 Prerequisites
 
-- **Node.js** 18+ 
+- **Node.js** 18+
 - **npm** or **yarn** package manager
 - **PostgreSQL** database (local or cloud-hosted)
 - Environment variables (see [Environment Setup](#environment-setup))
@@ -192,6 +195,7 @@ prisma/
 ## 🗄️ Database Schema
 
 ### Voice Model
+
 - **id**: Unique identifier
 - **name**: Voice name
 - **description**: Voice description
@@ -202,6 +206,7 @@ prisma/
 - **orgId**: Organization ID (optional)
 
 ### Generation Model
+
 - **id**: Unique identifier
 - **orgId**: Organization ID
 - **voiceId**: Reference to Voice
@@ -286,6 +291,7 @@ const generation = await prisma.generation.create({
 ## 🐛 Troubleshooting
 
 ### Database Connection Issues
+
 ```bash
 # Verify DATABASE_URL is correct
 # Check PostgreSQL is running
@@ -293,10 +299,12 @@ psql $DATABASE_URL -c "SELECT 1"
 ```
 
 ### Missing Environment Variables
+
 - Ensure all required variables are in `.env.local`
 - Restart dev server after adding variables
 
 ### Audio Playback Issues
+
 - Check browser permissions for audio playback
 - Verify audio files exist in R2 bucket
 
