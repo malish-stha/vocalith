@@ -308,17 +308,10 @@ psql $DATABASE_URL -c "SELECT 1"
 - Check browser permissions for audio playback
 - Verify audio files exist in R2 bucket
 
-## 📝 License
-
-[Add your license information here]
 
 ## 👥 Contributors
 
-- [Your name/team]
-
-## 📧 Support
-
-For issues, questions, or feature requests, please open an issue on GitHub or contact support.
+- Malish Shrestha
 
 ---
 
